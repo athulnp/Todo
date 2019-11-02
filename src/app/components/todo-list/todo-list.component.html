@@ -1,0 +1,9 @@
+<div>
+    <h5>TODO List</h5>
+    <ul>
+        <li *ngFor="let t of storeApi.getList()">
+            <app-todo-item [todo]="t"></app-todo-item>
+        </li>
+
+    </ul>
+</div>
