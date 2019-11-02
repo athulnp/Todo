@@ -5,12 +5,16 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class TodoEditService {
-  private subject = new Subject<any>();
+  private subject = new Subject<Todo>();
   constructor() { }
 
   invokeEdit(item: Todo) {
-    console.log('Invoke ..', item.title);
-    this.subject.next({ it: item });
+    console.log('Editing TODO..', item.title);
+    this.subject.next(item);
+  }
+
+  editTriggerEvent() {
+    return this.subject.asObservable()
   }
 }
 

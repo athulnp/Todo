@@ -16,12 +16,16 @@ export class TodoItemComponent implements OnInit {
 
   ngOnInit() {
   }
+
   delete(id: string) {
     this.storeApi.deleteItem(id);
   }
 
   edit(item: Todo) {
-    console.log('edit ...', item.title);
-    this.todoEditApi.invokeEdit(item)
+    this.todoEditApi.invokeEdit({
+      id: item.id,
+      title: item.title,
+      description: item.description
+    })
   }
 }

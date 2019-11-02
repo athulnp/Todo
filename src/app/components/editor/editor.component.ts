@@ -1,6 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { TodoEditService } from 'src/app/service/todo-edit-service';
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
@@ -8,27 +8,30 @@ import { Observable, Subject, Subscription } from 'rxjs';
 })
 export class EditorComponent implements OnInit {
   todo: Todo
-  subject: Subject<any>
-  subscription: Subscription
 
-  constructor(private storeApi: StoreService) {
+  constructor(private storeApi: StoreService, private todoEditSrv: TodoEditService) {
     this.reset();
-    this.updateItem();
   }
 
   ngOnInit() {
+    this.todoEditSrv.editTriggerEvent().subscribe(t => this.handleEdit(t))
   }
 
   canSave(): boolean {
     return this.todo.title != "" && this.todo.description != "";
   }
 
+  handleEdit(item: Todo) {
+    console.log('updating editor with ', item);
+    this.todo = item;
+  }
+
   isEdit(): boolean {
-    return this.todo.id != "" ? true : false;
+    return this.todo.id ? true : false;
   }
 
   saveItem() {
-    if (this.todo.id != "") {
+    if (this.isEdit()) {
       this.storeApi.updateItem(this.todo);
     }
     else {
@@ -40,20 +43,6 @@ export class EditorComponent implements OnInit {
     }
   }
 
-  updateItem() {
-    if (this.getMessages())
-      this.subscription = this.getMessages().subscribe(item => {
-        console.log(item.title);
-
-        this.todo = item;
-      });
-  }
-
-  getMessages(): Observable<any> {
-    if (this.subject != undefined) {
-      return this.subject.asObservable();
-    }
-  }
   reset() {
     this.todo = {
       title: "",
