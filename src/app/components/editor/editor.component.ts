@@ -1,5 +1,6 @@
 import { Component, OnInit, } from '@angular/core';
 import { StoreService } from 'src/app/service/store.service';
+import { Observable, Subject, Subscription } from 'rxjs';
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
@@ -7,9 +8,12 @@ import { StoreService } from 'src/app/service/store.service';
 })
 export class EditorComponent implements OnInit {
   todo: Todo
+  subject: Subject<any>
+  subscription: Subscription
 
   constructor(private storeApi: StoreService) {
     this.reset();
+    this.updateItem();
   }
 
   ngOnInit() {
@@ -20,12 +24,12 @@ export class EditorComponent implements OnInit {
   }
 
   isEdit(): boolean {
-    return false;
+    return this.todo.id != "" ? true : false;
   }
 
   saveItem() {
-    if (this.todo.id) {
-      // update
+    if (this.todo.id != "") {
+      this.storeApi.updateItem(this.todo);
     }
     else {
       this.todo.id = this.generateuuid()
@@ -36,6 +40,20 @@ export class EditorComponent implements OnInit {
     }
   }
 
+  updateItem() {
+    if (this.getMessages())
+      this.subscription = this.getMessages().subscribe(item => {
+        console.log(item.title);
+
+        this.todo = item;
+      });
+  }
+
+  getMessages(): Observable<any> {
+    if (this.subject != undefined) {
+      return this.subject.asObservable();
+    }
+  }
   reset() {
     this.todo = {
       title: "",

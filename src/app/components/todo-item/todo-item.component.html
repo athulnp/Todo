@@ -1,4 +1,6 @@
 <div>
     <h3>{{todo.title}}</h3>
     <small>{{todo.description}}</small>
+    <span><button (click)="edit(todo)">Edit</button></span>
+    <span><button (click)="delete(todo.id)">Delete</button></span>
 </div>

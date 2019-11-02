@@ -1,9 +1,9 @@
 <div>
     <h2>Editor</h2>
-    <div><input [(ngModel)]="todo.title" />
+    <div><input [(ngModel)]="todo.title" [innerText]="todo.title" />
         <button (click)="saveItem()" [disabled]="!canSave()">{{isEdit() ? "Update" : "Add"}}</button>
     </div>
     <div>
-        <textarea [(ngModel)]="todo.description" name="" id="" cols="30" rows="10"></textarea>
+        <textarea [(ngModel)]="todo.description" name="" id="" cols="30" rows="10">{{todo.description}}</textarea>
     </div>
 </div>
