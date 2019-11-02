@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TodoItemComponent implements OnInit {
 
   @Input()
-  todo: Todo
+  todo: Todo;
 
   constructor() { }
 
